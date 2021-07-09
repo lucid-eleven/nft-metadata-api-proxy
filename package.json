@@ -1,0 +1,18 @@
+{
+  "name": "nftmediabox-router",
+  "version": "1.0.0",
+  "description": "api router with caching",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "ethers": "^5.4.1",
+    "express": "^4.17.1",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.1"
+  }
+}
