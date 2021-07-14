@@ -1,6 +1,6 @@
 const NodeCache = require('node-cache');
 
-class Cache {
+class CacheService {
 
   constructor(ttlSeconds) {
     this.cache = new NodeCache({ stdTTL: ttlSeconds, checkperiod: ttlSeconds * 0.2, useClones: false });
@@ -10,12 +10,8 @@ class Cache {
 
     const value = this.cache.get(key);
     if (value) {
-      console.log("Getting from cache")
-
       return Promise.resolve(value);
     }
-
-    console.log("Getting from 3rd party")
 
     return storeFunction().then((result) => {
       this.cache.set(key, result);
@@ -46,4 +42,4 @@ class Cache {
 }
 
 
-module.exports = Cache;
+module.exports = CacheService;

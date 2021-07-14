@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 
-var monsterRouter = require('./routes/api/monsters')
-app.use('/api/monsters', monsterRouter);
+var metadataRouter = require('./routes/api/token-metadata')
+app.use('/api/token-metadata', metadataRouter);
 
 module.exports = app;
