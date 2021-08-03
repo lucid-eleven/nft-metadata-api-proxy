@@ -26,3 +26,15 @@ All configuration is done via environment variables, which are as follows:
 | CONTRACT_ADDRESS      | Ethereum address for the NFT Smart Contract       |
 | ETHEREUM_RPC_URL   | An endpoint for an Ethereum RPC provider, e.g. [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/) |
 | SOURCE_BASE_URI   | The base url for your full source metadata, don't forget the trailing `/`  |
+
+# Using this proxy
+
+Once the webserver is running, you can request token metadata at
+
+`localhost:3000/api/token-metadata/{tokenId}`
+
+If you're hosting on Heroku or some other hosting provider you will replace `localhost:3000` with whatever the base url for your app is.
+
+Test to make sure that it only returns the metadata for tokenIds that actually exist in your smart contract.
+
+Once everything is working as expected, update the baseURI in your smart contract to the url of this server, including `/api/token-metadata/`.
