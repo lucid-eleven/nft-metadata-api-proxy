@@ -1,7 +1,7 @@
 const { ethers } = require('ethers')
 const ERC721_ABI = require('../contracts/ERC721.json')
-const localData = require('../metadata.json')
 const CacheService = require('../cache')
+const fetch = require('node-fetch');
 
 const ttl = 30; //cache for 30 seconds;
 const cache = new CacheService(ttl);
@@ -26,7 +26,10 @@ const MetadataRepo = {
       })
       .then((exists) => {
         if (exists) {
-          return localData[id];
+          return fetch(`${process.env.SOURCE_BASE_URI}${id}`, {method: 'GET'})
+            .then(res => {
+              return res.json();
+            })
         } else {
           return { error: `Token ${id} doesn't exist`};
         }

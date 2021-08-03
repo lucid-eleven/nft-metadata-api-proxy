@@ -1,0 +1,31 @@
+{
+    "name": "NFT Metadata Proxy",
+    "description": "An API proxy for protecting NFT metadata with caching",
+    "keywords": [
+      "erc721",
+      "nft",
+      "metadata",
+      "proxy"
+    ],
+    "repository": "https://github.com/lucid-eleven/nft-metadata-api-proxy",
+    "env": {
+      "CONTRACT_ADDRESS": {
+        "description": "Ethereum address for the NFT Smart Contract",
+        "required": true
+      },
+      "ETHEREUM_RPC_URL": {
+        "description": "An endpoint for an Ethereum RPC provider, e.g. [Infura](https://infura.io/) or [Alchemy](https://www.alchemy.com/)",
+        "required": true
+      },
+      "SOURCE_BASE_URI": {
+        "description": "The base url for your full source metadata, don't forget the trailing `/`",
+        "required": true
+      }
+    },
+    "image": "heroku/nodejs",
+    "buildpacks": [
+      {
+        "url": "heroku/nodejs"
+      }
+    ]
+  }
