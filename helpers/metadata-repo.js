@@ -30,6 +30,9 @@ const MetadataRepo = {
             .then(res => {
               return res.json();
             })
+            .then((data) => {
+              return data;
+            })
         } else {
           return { error: `Token ${id} doesn't exist`};
         }
