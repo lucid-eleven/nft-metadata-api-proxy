@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "api proxy for controlling NFT metadata with caching",
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "lucid-eleven",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
