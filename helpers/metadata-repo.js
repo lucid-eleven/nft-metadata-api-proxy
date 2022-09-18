@@ -1,45 +1,84 @@
-const { ethers } = require('ethers')
-const ERC721_ABI = require('../contracts/ERC721.json')
-const CacheService = require('../cache')
-const fetch = require('node-fetch');
+const { ethers } = require("ethers");
+const ERC721_ABI = require("../abi/ERC721.json");
+const CacheService = require("../cache");
+const fetch = require("node-fetch");
 
 const ttl = 30; //cache for 30 seconds by default, overriden to 0 (unlimited) for getById below;
 const cache = new CacheService(ttl);
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.ETHEREUM_RPC_URL);
-const erc721Contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, ERC721_ABI.abi, provider);
 
 const MetadataRepo = {
-  getAll() {
-    return cache.get("TotalSupply", () => erc721Contract.totalSupply().then((bigNumber) => bigNumber.toNumber()))
+  validateCollection(collection) {
+    let collectionName = collection.toUpperCase();
+
+    if (
+      process.env[`SOURCE_BASE_URI_${collectionName}`] == null ||
+      process.env[`CONTRACT_ADDRESS_${collectionName}`] == null
+    ) {
+      return Promise.resolve(false);
+    }
+
+    return Promise.resolve(true);
+  },
+
+  getTotalSupply(collection) {
+    let collectionName = collection.toUpperCase();
+
+    return cache
+      .get(`${collectionName}_TotalSupply`, () =>
+        cache
+          .get(
+            `${collectionName}_Contract`,
+            () =>
+              Promise.resolve(
+                new ethers.Contract(process.env[`CONTRACT_ADDRESS_${collectionName}`], ERC721_ABI, provider)
+              ),
+            0
+          )
+          .then((erc721Contract) => erc721Contract.totalSupply())
+          .then((bigNumber) => bigNumber.toNumber())
+      )
       .then((total) => {
         return total;
       });
   },
-  
-  getById(id) {
-    return cache.get(`Token_${id}`, () => {
-        return erc721Contract
-          .ownerOf(id)
-          .then(() => true)
-          .catch(() => false);
-      }, 0)
+
+  getToken(collection, id) {
+    let collectionName = collection.toUpperCase();
+
+    return cache
+      .get(
+        `${collectionName}_Token_${id}`,
+        () =>
+          cache
+            .get(
+              `${collectionName}_Contract`,
+              () =>
+                Promise.resolve(
+                  new ethers.Contract(process.env[`CONTRACT_ADDRESS_${collectionName}`], ERC721_ABI, provider)
+                ),
+              0
+            )
+            .then((erc721Contract) => erc721Contract.ownerOf(id))
+            .then(() => true)
+            .catch(() => false),
+        0
+      )
       .then((exists) => {
         if (exists) {
-          return fetch(`${process.env.SOURCE_BASE_URI}${id}`, {method: 'GET'})
-            .then(res => {
+          return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
+            .then((res) => {
               return res.json();
             })
             .then((data) => {
               return data;
-            })
+            });
         } else {
-          return { error: `Token ${id} doesn't exist`};
+          return { error: `Token ${id} doesn't exist` };
         }
       });
-  }
+  },
 };
 
 module.exports = MetadataRepo;
-
-

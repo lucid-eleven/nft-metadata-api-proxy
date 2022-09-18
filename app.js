@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 
-var metadataRouter = require('./routes/api/token-metadata')
-app.use('/api/token-metadata', metadataRouter);
+var collectionRouter = require("./routes/collection");
+app.use("/collection", collectionRouter);
 
 module.exports = app;

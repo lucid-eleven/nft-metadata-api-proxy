@@ -1,13 +1,11 @@
-const NodeCache = require('node-cache');
+const NodeCache = require("node-cache");
 
 class CacheService {
-
   constructor(ttlSeconds) {
     this.cache = new NodeCache({ stdTTL: ttlSeconds, checkperiod: ttlSeconds * 0.2, useClones: false });
   }
 
   get(key, storeFunction, ttl) {
-
     const value = this.cache.get(key);
     if (value) {
       return Promise.resolve(value);
@@ -23,7 +21,7 @@ class CacheService {
     this.cache.del(keys);
   }
 
-  delStartWith(startStr = '') {
+  delStartWith(startStr = "") {
     if (!startStr) {
       return;
     }
@@ -40,6 +38,5 @@ class CacheService {
     this.cache.flushAll();
   }
 }
-
 
 module.exports = CacheService;
