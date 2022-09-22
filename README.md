@@ -18,7 +18,7 @@ followed by
 
 Alternatively, you can easily host this on Heroku:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/lucid-eleven/nft-metadata-api-proxy)
 
 # Configuration
 
