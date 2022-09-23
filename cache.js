@@ -8,10 +8,12 @@ class CacheService {
   get(key, storeFunction, ttl) {
     const value = this.cache.get(key);
     if (value) {
+      console.log(`Get ${key} from cache`);
       return Promise.resolve(value);
     }
 
     return storeFunction().then((result) => {
+      console.log(`Get ${key} from function`);
       this.cache.set(key, result, ttl);
       return result;
     });

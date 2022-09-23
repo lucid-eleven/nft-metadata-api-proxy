@@ -62,22 +62,23 @@ const MetadataRepo = {
             )
             .then((erc721Contract) => erc721Contract.ownerOf(id))
             .then(() => true)
-            .catch(() => false),
+            .catch(() => false)
+            .then((exists) => {
+              if (exists) {
+                return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
+                  .then((res) => {
+                    return res.json();
+                  })
+                  .then((data) => {
+                    return data;
+                  });
+              } else {
+                throw Error(`Token ${id} doesn't exist`);
+              }
+            }),
         0
       )
-      .then((exists) => {
-        if (exists) {
-          return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
-            .then((res) => {
-              return res.json();
-            })
-            .then((data) => {
-              return data;
-            });
-        } else {
-          return { error: `Token ${id} doesn't exist` };
-        }
-      });
+      .catch((error) => error.message);
   },
 };
 
