@@ -67,6 +67,9 @@ const MetadataRepo = {
               if (exists) {
                 return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
                   .then((res) => {
+                    if (res.status != 200) {
+                      throw new Error(res.statusText);
+                    }
                     return res.json();
                   })
                   .then((data) => {
