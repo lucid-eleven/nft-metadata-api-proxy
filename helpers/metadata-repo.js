@@ -47,41 +47,39 @@ const MetadataRepo = {
   getToken(collection, id) {
     let collectionName = collection.toUpperCase();
 
-    return cache
-      .get(
-        `${collectionName}_Token_${id}`,
-        () =>
-          cache
-            .get(
-              `${collectionName}_Contract`,
-              () =>
-                Promise.resolve(
-                  new ethers.Contract(process.env[`CONTRACT_ADDRESS_${collectionName}`], ERC721_ABI, provider)
-                ),
-              0
-            )
-            .then((erc721Contract) => erc721Contract.ownerOf(id))
-            .then(() => true)
-            .catch(() => false)
-            .then((exists) => {
-              if (exists) {
-                return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
-                  .then((res) => {
-                    if (res.status != 200) {
-                      throw new Error(res.statusText);
-                    }
-                    return res.json();
-                  })
-                  .then((data) => {
-                    return data;
-                  });
-              } else {
-                throw Error(`Token ${id} doesn't exist`);
-              }
-            }),
-        0
-      )
-      .catch((error) => error.message);
+    return cache.get(
+      `${collectionName}_Token_${id}`,
+      () =>
+        cache
+          .get(
+            `${collectionName}_Contract`,
+            () =>
+              Promise.resolve(
+                new ethers.Contract(process.env[`CONTRACT_ADDRESS_${collectionName}`], ERC721_ABI, provider)
+              ),
+            0
+          )
+          .then((erc721Contract) => erc721Contract.ownerOf(id))
+          .then(() => true)
+          .catch(() => false)
+          .then((exists) => {
+            if (exists) {
+              return fetch(`${process.env[`SOURCE_BASE_URI_${collectionName}`]}${id}`, { method: "GET" })
+                .then((res) => {
+                  if (res.status != 200) {
+                    throw new Error(res.statusText);
+                  }
+                  return res.json();
+                })
+                .then((data) => {
+                  return data;
+                });
+            } else {
+              throw Error(`Token ${id} doesn't exist`);
+            }
+          }),
+      0
+    );
   },
 };
 
