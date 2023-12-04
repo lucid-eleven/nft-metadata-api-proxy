@@ -30,7 +30,7 @@ router.get("/:collection/:tokenId", function (req, res, next) {
           })
         : res.json({ error: `${collectionName} is not configured or is not a valid collection` });
     })
-    .catch((error) => res.status(500).send(error));
+    .catch((error) => res.status(500).send(error.message));
 });
 
 module.exports = router;

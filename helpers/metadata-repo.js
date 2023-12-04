@@ -78,7 +78,7 @@ const MetadataRepo = {
               throw Error(`Token ${id} doesn't exist`);
             }
           }),
-      0
+      600
     );
   },
 };
